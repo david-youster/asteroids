@@ -25,6 +25,8 @@ while not done:
         done = True
     if key[pygame.K_UP]:
         speed += speed_increment
+    if key[pygame.K_DOWN]:
+        speed -= speed_increment
     if key[pygame.K_LEFT]:
         rotation += 10
     if key[pygame.K_RIGHT]:
