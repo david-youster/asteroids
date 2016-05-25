@@ -1,17 +1,20 @@
 import pygame
-import os
+import math
 
 sprite_path = './res/spaceship1_small-White.png'
 size = width, height = (800, 600)
 
 pygame.init()
 screen = pygame.display.set_mode(size)
-x, y = 50, 50
+x, y = width/2, height/2
+rotation = 0
 image = pygame.image.load(sprite_path).convert()
 
 clock = pygame.time.Clock()
 done = False
 while not done:
+    screen.fill((0, 0, 0,))
+    dx, dy = 0, 0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -19,15 +22,16 @@ while not done:
     if key[pygame.K_ESCAPE]:
         done = True
     if key[pygame.K_UP]:
-        y-= 3
-    if key[pygame.K_DOWN]:
-        y += 3
+        dy = -math.cos(math.radians(rotation))
+        dx = -math.sin(math.radians(rotation))
     if key[pygame.K_LEFT]:
-        x -= 3
+        rotation += 10
     if key[pygame.K_RIGHT]:
-        x += 3
+        rotation -= 10
 
-    screen.fill((0, 0, 0,))
-    screen.blit(image, (x, y))
+    rotation %= 360
+    rotated_image = pygame.transform.rotate(image, rotation)
+    x, y = x + dx*3, y + dy*3
+    screen.blit(rotated_image, (x, y))
     pygame.display.flip()
     clock.tick(60)
