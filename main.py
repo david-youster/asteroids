@@ -9,6 +9,7 @@ fill_colour = 0, 0, 0
 
 pygame.init()
 screen = pygame.display.set_mode(size)
+entities = []
 
 
 class Player:
@@ -21,6 +22,7 @@ class Player:
         self.velocity = 0
         self.acceleration = 0.1
         self.sprite = pygame.image.load(sprites['player']).convert()
+        entities.append(self)
 
     def accelerate(self):
         self.velocity += self.acceleration
@@ -53,7 +55,7 @@ def main():
     player = Player()
     while True:
         update(player)
-        draw([player])
+        draw()
         clock.tick(fps)
 
 
@@ -75,7 +77,7 @@ def update(player):
     player.move()
 
 
-def draw(entities):
+def draw():
     screen.fill(fill_colour)
     for entity in entities:
         entity.draw(screen)
