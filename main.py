@@ -29,6 +29,8 @@ while not done:
         dx = -math.sin(math.radians(rotation))
     if key[pygame.K_DOWN]:
         speed -= speed_increment
+        dy = -math.cos(math.radians(rotation))
+        dx = -math.sin(math.radians(rotation))
     if key[pygame.K_LEFT]:
         rotation += 10
     if key[pygame.K_RIGHT]:
