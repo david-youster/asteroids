@@ -1,8 +1,11 @@
 import pygame
 import math
+import sys
 
 sprites = {'player': './res/spaceship1_small-White.png'}
 size = width, height = 800, 600
+fps = 60
+fill_colour = 0, 0, 0
 
 pygame.init()
 screen = pygame.display.set_mode(size)
@@ -47,29 +50,41 @@ class Player:
 
 def main():
     clock = pygame.time.Clock()
-    done = False
     player = Player()
-    while not done:
-        screen.fill((0, 0, 0,))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                done = True
-        key = pygame.key.get_pressed()
-        if key[pygame.K_ESCAPE]:
-            done = True
-        if key[pygame.K_UP]:
-            player.accelerate()
-        if key[pygame.K_DOWN]:
-            player.decelerate()
-        if key[pygame.K_LEFT]:
-            player.rotate(False)
-        if key[pygame.K_RIGHT]:
-            player.rotate()
+    while True:
+        update(player)
+        draw([player])
+        clock.tick(fps)
 
-        player.move()
-        player.draw(screen)
-        pygame.display.flip()
-        clock.tick(60)
+
+def update(player):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            shutdown()
+    key = pygame.key.get_pressed()
+    if key[pygame.K_ESCAPE]:
+        shutdown()
+    if key[pygame.K_UP]:
+        player.accelerate()
+    if key[pygame.K_DOWN]:
+        player.decelerate()
+    if key[pygame.K_LEFT]:
+        player.rotate()
+    if key[pygame.K_RIGHT]:
+        player.rotate(False)
+    player.move()
+
+
+def draw(entities):
+    screen.fill(fill_colour)
+    for entity in entities:
+        entity.draw(screen)
+    pygame.display.flip()
+
+
+def shutdown():
+    pygame.quit()
+    sys.exit()
 
 if __name__ == '__main__':
     main()
