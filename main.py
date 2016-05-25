@@ -9,6 +9,8 @@ screen = pygame.display.set_mode(size)
 x, y = width/2, height/2
 rotation = 0
 image = pygame.image.load(sprite_path).convert()
+speed = 0
+speed_increment = 0.1
 
 clock = pygame.time.Clock()
 done = False
@@ -22,8 +24,7 @@ while not done:
     if key[pygame.K_ESCAPE]:
         done = True
     if key[pygame.K_UP]:
-        dy = -math.cos(math.radians(rotation))
-        dx = -math.sin(math.radians(rotation))
+        speed += speed_increment
     if key[pygame.K_LEFT]:
         rotation += 10
     if key[pygame.K_RIGHT]:
@@ -31,7 +32,9 @@ while not done:
 
     rotation %= 360
     rotated_image = pygame.transform.rotate(image, rotation)
-    x, y = x + dx*3, y + dy*3
+    dy = -math.cos(math.radians(rotation))
+    dx = -math.sin(math.radians(rotation))
+    x, y = x + dx*speed, y + dy*speed
     screen.blit(rotated_image, (x, y))
     pygame.display.flip()
     clock.tick(60)
