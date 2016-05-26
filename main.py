@@ -43,7 +43,7 @@ class Player:
         if (self.velocity > self.min_velocity and
                 self.temperature < self.max_temperature):
             self.velocity -= self.acceleration
-            self.temperature += 1
+            self.temperature += abs(self.velocity)
         self.adjust_trajectory()
 
     def adjust_trajectory(self):
@@ -83,8 +83,8 @@ class Player:
     def reverse_direction(self):
         self.velocity = -(self.velocity * 0.9)
 
-    def cool_engine(self):
-        self.temperature -= 0.1 if self.temperature >= 1 else 0
+    def cool_engine(self, amount=0.5):
+        self.temperature -= amount if self.temperature >= 1 else 0
 
     def shoot(self):
         Bullet(self.x+17, self.y+10, self.rotation)
