@@ -50,7 +50,8 @@ class Player:
             self.velocity /= self.inertia
 
     def rotate(self, clockwise=True):
-        self.rotation += self.rotation_speed if clockwise else -rotation_speed
+        speed = self.rotation_speed if clockwise else -self.rotation_speed
+        self.rotation += speed
         self.rotation %= 360
 
     def move(self):
