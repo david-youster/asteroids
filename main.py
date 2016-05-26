@@ -33,7 +33,7 @@ class Player:
         self.inertia = 4
         self.temperature = 0
         self.max_temperature = 1000
-        self.sprite = pygame.image.load(sprites['player']).convert()
+        self.sprite = pygame.image.load(sprites['player']).convert_alpha()
         entities.append(self)
 
     def accelerate(self):
