@@ -184,11 +184,21 @@ def load_sprite_group(path, start, end):
 
 
 def update(player):
+    handle_events()
+    handle_keys(player)
+    for entity in entities:
+        entity.update()
+
+
+def handle_events():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             shutdown()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_h:
             toggle_hud_mode()
+
+
+def handle_keys(player):
     key = pygame.key.get_pressed()
     if key[pygame.K_ESCAPE]:
         shutdown()
@@ -202,8 +212,6 @@ def update(player):
         player.rotate(False)
     if key[pygame.K_SPACE]:
         player.shoot()
-    for entity in entities:
-        entity.update()
 
 
 def toggle_hud_mode():
