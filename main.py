@@ -83,7 +83,7 @@ class Player:
         self.velocity = -(self.velocity * 0.9)
 
     def cool_engine(self):
-        self.temperature -= 0.1 if self.temperature > 0 else 0
+        self.temperature -= 0.1 if self.temperature >= 1 else 0
 
     def shoot(self):
         pass
