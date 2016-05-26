@@ -13,6 +13,7 @@ font = pygame.font.SysFont('monospace', 15)
 screen = pygame.display.set_mode(size)
 entities = []
 
+hud_mode = 0
 
 class Player:
 
@@ -94,16 +95,27 @@ def update(player):
         player.rotate()
     if key[pygame.K_RIGHT]:
         player.rotate(False)
+    if key[pygame.K_h]:
+        toggle_hud_mode()
     player.move()
     player.cool_engine()
+
+
+def toggle_hud_mode():
+    global hud_mode
+    hud_mode = (hud_mode + 1) % 2
 
 
 def draw():
     screen.fill(fill_colour)
     for entity in entities:
         entity.draw(screen)
-    render_status_panel(screen)
+    render_hud(screen)
     pygame.display.flip()
+
+
+def render_hud(screen):
+    [render_status_panel, render_debug_panel][hud_mode](screen)
 
 
 def render_status_panel(screen):
