@@ -85,6 +85,9 @@ class Player:
     def cool_engine(self):
         self.temperature -= 0.1 if self.temperature > 0 else 0
 
+    def shoot(self):
+        pass
+
     def draw(self, screen):
         rotated_image = pygame.transform.rotate(self.sprite, self.rotation)
         screen.blit(rotated_image, (self.x, self.y))
@@ -116,6 +119,8 @@ def update(player):
         player.rotate()
     if key[pygame.K_RIGHT]:
         player.rotate(False)
+    if key[pygame.K_SPACE]:
+        player.shoot()
     player.move()
     player.cool_engine()
 
