@@ -20,7 +20,6 @@ class Player:
         self.x, self.y = width/2, height/2
         self.dx, self.dy = 0, 0
         self.rotation = 0
-        self.speed = 0
         self.velocity = 0
         self.acceleration = 0.1
         self.sprite = pygame.image.load(sprites['player']).convert()
