@@ -35,8 +35,14 @@ class Player:
         self.adjust_trajectory()
 
     def adjust_trajectory(self):
+        px, py = self.dx, self.dy
         self.dx = -math.sin(math.radians(self.rotation))
         self.dy = -math.cos(math.radians(self.rotation))
+        self.adjust_velocity(px, py)
+
+    def adjust_velocity(self, px, py):
+        if (px, py) != (self.dx, self.dy):
+            self.velocity /= 4
 
     def rotate(self, clockwise=True):
         degree = 10
