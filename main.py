@@ -26,6 +26,8 @@ class Player:
         self.min_velocity = -1
         self.acceleration = 0.1
         self.inertia = 4
+        self.temperature = 0
+        self.max_temperature = 100
         self.sprite = pygame.image.load(sprites['player']).convert()
         entities.append(self)
 
