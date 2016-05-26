@@ -95,7 +95,8 @@ def draw():
 
 def draw_debug_panel(screen):
     player = entities[0]
-    text = 'X, Y: {} | DX, DY: {} | ACC: {:.1f} | VEL: {:.2f} | ROT: {}'.format(
+    text = 'X, Y: {} | DX, DY: {} | ACC: {:.1f} | VEL: {:.2f} | ROT: {}'
+    text = text.format(
         (round(player.x), round(player.y)),
         (round(player.dx), round(player.dy)),
         player.acceleration, player.velocity, player.rotation)
@@ -103,10 +104,10 @@ def draw_debug_panel(screen):
     screen.blit(text, (10, 580))
 
 
-
 def shutdown():
     pygame.quit()
     sys.exit()
+
 
 if __name__ == '__main__':
     main()
