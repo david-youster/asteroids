@@ -61,7 +61,7 @@ class Player:
         self.rotation += speed
         self.rotation %= 360
 
-    def move(self):
+    def update(self):
         if self.inside_x_boundary():
             self.x += self.dx * self.velocity
         else:
@@ -70,6 +70,7 @@ class Player:
             self.y += self.dy * self.velocity
         else:
             self.reverse_direction()
+        self.cool_engine()
 
     def inside_x_boundary(self):
         nx = self.x + self.dx*self.velocity
@@ -106,7 +107,7 @@ class Bullet:
         dy = -math.cos(math.radians(angle))
         return dx, dy
 
-    def move(self):
+    def update(self):
         if self.inside_x_boundary() and self.inside_y_boundary():
             self.x += self.dx * self.velocity
             self.y += self.dy * self.velocity
@@ -153,10 +154,8 @@ def update(player):
         player.rotate(False)
     if key[pygame.K_SPACE]:
         player.shoot()
-    player.move()
-    player.cool_engine()
     for entity in entities:
-        entity.move()
+        entity.update()
 
 
 def toggle_hud_mode():
