@@ -2,7 +2,7 @@ import pygame
 import math
 import sys
 
-sprites = {
+res = {
     'player': './res/ships/white_small.png',
     'asteroid': './res/asteroids/small/a10000.png'}
 size = width, height = 800, 600
@@ -12,10 +12,12 @@ font_colour = 255, 255, 255
 
 pygame.init()
 font = pygame.font.SysFont('monospace', 15)
-
 screen = pygame.display.set_mode(size)
-entities = []
 
+sprites = {
+    'player': pygame.image.load(res['player']).convert_alpha(),
+    'asteroid': pygame.image.load(res['asteroid']).convert_alpha()}
+entities = []
 hud_mode = 0
 
 
@@ -33,7 +35,7 @@ class Player:
         self.inertia = 4
         self.temperature = 0
         self.max_temperature = 1000
-        self.sprite = pygame.image.load(sprites['player']).convert_alpha()
+        self.sprite = sprites['player']
         entities.append(self)
 
     def accelerate(self):
@@ -136,7 +138,7 @@ class Asteroid:
     def __init__(self):
         self.x, self.y = self.init_position()
         self.dx, self.dy = 0, 0
-        self.sprite = pygame.image.load(sprites['asteroid']).convert_alpha()
+        self.sprite = sprites['asteroid']
         entities.append(self)
 
     def init_position(self):
