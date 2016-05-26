@@ -84,6 +84,8 @@ def update(player):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             shutdown()
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_h:
+            toggle_hud_mode()
     key = pygame.key.get_pressed()
     if key[pygame.K_ESCAPE]:
         shutdown()
@@ -95,8 +97,6 @@ def update(player):
         player.rotate()
     if key[pygame.K_RIGHT]:
         player.rotate(False)
-    if key[pygame.K_h]:
-        toggle_hud_mode()
     player.move()
     player.cool_engine()
 
