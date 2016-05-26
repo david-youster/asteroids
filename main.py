@@ -122,7 +122,7 @@ def render_hud(screen):
 
 def render_status_panel(screen):
     player = entities[0]
-    text = 'Temp: {:.2f}/{}'.format(player.temperature, player.max_temperature)
+    text = 'Temp: {:.0f}/{}'.format(player.temperature, player.max_temperature)
     text = font.render(text, 1, (255, 255, 255))
     screen.blit(text, (10, 580))
 
