@@ -96,11 +96,18 @@ def draw():
     screen.fill(fill_colour)
     for entity in entities:
         entity.draw(screen)
-    draw_debug_panel(screen)
+    render_status_panel(screen)
     pygame.display.flip()
 
 
-def draw_debug_panel(screen):
+def render_status_panel(screen):
+    player = entities[0]
+    text = 'Hello Status Panel!'
+    text = font.render(text, 1, (255, 255, 255))
+    screen.blit(text, (10, 580))
+
+
+def render_debug_panel(screen):
     player = entities[0]
     text = 'X, Y: {} | DX, DY: {} | ACC: {:.1f} | VEL: {:.2f} | ROT: {}'
     text = text.format(
