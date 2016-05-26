@@ -20,17 +20,22 @@ class Player:
         self.x, self.y = width/2, height/2
         self.dx, self.dy = 0, 0
         self.rotation = 0
+        self.rotation_speed = 10
         self.velocity = 0
+        self.max_velocity = 3
+        self.min_velocity = -1
         self.acceleration = 0.1
         self.sprite = pygame.image.load(sprites['player']).convert()
         entities.append(self)
 
     def accelerate(self):
-        self.velocity += self.acceleration
+        if self.velocity < self.max_velocity:
+            self.velocity += self.acceleration
         self.adjust_trajectory()
 
     def decelerate(self):
-        self.velocity -= self.acceleration
+        if self.velocity > self.min_velocity:
+            self.velocity -= self.acceleration
         self.adjust_trajectory()
 
     def adjust_trajectory(self):
@@ -44,8 +49,7 @@ class Player:
             self.velocity /= 4
 
     def rotate(self, clockwise=True):
-        degree = 10
-        self.rotation += degree if clockwise else -degree
+        self.rotation += self.rotation_speed if clockwise else -rotation_speed
         self.rotation %= 360
 
     def move(self):
