@@ -8,6 +8,8 @@ fps = 60
 fill_colour = 0, 0, 0
 
 pygame.init()
+font = pygame.font.SysFont('monospace', 15)
+
 screen = pygame.display.set_mode(size)
 entities = []
 
@@ -26,13 +28,13 @@ class Player:
 
     def accelerate(self):
         self.velocity += self.acceleration
-        self.calculate_trajectory()
+        self.adjust_trajectory()
 
     def decelerate(self):
         self.velocity -= self.acceleration
-        self.calculate_trajectory()
+        self.adjust_trajectory()
 
-    def calculate_trajectory(self):
+    def adjust_trajectory(self):
         self.dx = -math.sin(math.radians(self.rotation))
         self.dy = -math.cos(math.radians(self.rotation))
 
@@ -81,7 +83,19 @@ def draw():
     screen.fill(fill_colour)
     for entity in entities:
         entity.draw(screen)
+    draw_debug_panel(screen)
     pygame.display.flip()
+
+
+def draw_debug_panel(screen):
+    player = entities[0]
+    text = 'X, Y: {} | DX, DY: {} | ACC: {:.1f} | VEL: {:.2f} | ROT: {}'.format(
+        (round(player.x), round(player.y)),
+        (round(player.dx), round(player.dy)),
+        player.acceleration, player.velocity, player.rotation)
+    text = font.render(text, 1, (0, 255, 0))
+    screen.blit(text, (10, 580))
+
 
 
 def shutdown():
