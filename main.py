@@ -99,7 +99,7 @@ class Bullet:
     def __init__(self, x, y, angle):
         self.x, self.y = x, y
         self.dx, self.dy = self.calculate_trajectory(angle)
-        self.velocity = 5
+        self.velocity = 50
         entities.append(self)
 
     def calculate_trajectory(self, angle):
