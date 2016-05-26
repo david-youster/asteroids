@@ -23,7 +23,7 @@ class Player:
         self.rotation = 0
         self.rotation_speed = 5
         self.velocity = 0
-        self.max_velocity = 3
+        self.max_velocity = 5
         self.min_velocity = -1
         self.acceleration = 0.1
         self.inertia = 4
@@ -36,7 +36,7 @@ class Player:
         if (self.velocity < self.max_velocity and
                 self.temperature < self.max_temperature):
             self.velocity += self.acceleration
-            self.temperature += self.acceleration*50
+            self.temperature += self.velocity
         self.adjust_trajectory()
 
     def decelerate(self):
