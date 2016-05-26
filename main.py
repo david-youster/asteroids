@@ -1,4 +1,5 @@
 import pygame
+import random
 import math
 import sys
 
@@ -142,7 +143,7 @@ class Asteroid:
         entities.append(self)
 
     def init_position(self):
-        return width/4, height/4
+        return width/random.randint(1, 10), height/random.randint(1, 10)
 
     def update(self):
         self.animate()
@@ -161,6 +162,7 @@ def main():
     player = Player()
     asteroid = Asteroid()
     while True:
+        create_asteroids()
         update(player)
         draw()
         clock.tick(fps)
@@ -181,6 +183,11 @@ def load_sprite_group(path, start, end):
     for i in range(start, end+1):
         group.append(load_sprite(path.replace('*', str(i))))
     return group
+
+
+def create_asteroids():
+    num_asteroids = random.randint(0, 10)
+    entities.extend((Asteroid() for i in range(num_asteroids+1)))
 
 
 def update(player):
