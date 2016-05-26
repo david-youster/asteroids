@@ -2,7 +2,7 @@ import pygame
 import math
 import sys
 
-sprites = {'player': './res/spaceship1_small-White.png'}
+sprites = {'player': './res/ships/white_small.png'}
 size = width, height = 800, 600
 fps = 60
 fill_colour = 0, 0, 0
