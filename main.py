@@ -62,8 +62,25 @@ class Player:
         self.rotation %= 360
 
     def move(self):
-        self.x += self.dx * self.velocity
-        self.y += self.dy * self.velocity
+        if self.inside_x_boundary():
+            self.x += self.dx * self.velocity
+        else:
+            self.reverse_direction()
+        if self.inside_y_boundary():
+            self.y += self.dy * self.velocity
+        else:
+            self.reverse_direction()
+
+    def inside_x_boundary(self):
+        nx = self.x + self.dx*self.velocity
+        return nx > 0 and nx < width
+
+    def inside_y_boundary(self):
+        ny = self.y + self.dy*self.velocity
+        return ny > 0 and ny < height
+
+    def reverse_direction(self):
+        self.velocity = -(self.velocity * 0.9)
 
     def cool_engine(self):
         self.temperature -= 0.1 if self.temperature > 0 else 0
