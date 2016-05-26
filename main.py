@@ -88,6 +88,7 @@ class Player:
 
     def shoot(self):
         Bullet(self.x+17, self.y+10, self.rotation)
+        self.temperature += 5
 
     def draw(self, screen):
         rotated_image = pygame.transform.rotate(self.sprite, self.rotation)
