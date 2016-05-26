@@ -36,7 +36,7 @@ class Player:
         if (self.velocity < self.max_velocity and
                 self.temperature < self.max_temperature):
             self.velocity += self.acceleration
-            self.temperature += self.velocity
+            self.temperature += abs(self.velocity)
         self.adjust_trajectory()
 
     def decelerate(self):
