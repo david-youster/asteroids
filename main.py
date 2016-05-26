@@ -25,7 +25,7 @@ class Player:
         self.x, self.y = width/2, height/2
         self.dx, self.dy = 0, 0
         self.rotation = 0
-        self.rotation_speed = 5
+        self.rotation_speed = 2
         self.velocity = 0
         self.max_velocity = 5
         self.min_velocity = -1
