@@ -105,7 +105,7 @@ def draw_debug_panel(screen):
         (round(player.x), round(player.y)),
         (round(player.dx), round(player.dy)),
         player.acceleration, player.velocity, player.rotation)
-    text = font.render(text, 1, (0, 255, 0))
+    text = font.render(text, 1, (255, 255, 255))
     screen.blit(text, (10, 580))
 
 
