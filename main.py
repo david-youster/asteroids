@@ -27,7 +27,7 @@ class Player:
         self.acceleration = 0.1
         self.inertia = 4
         self.temperature = 0
-        self.max_temperature = 100
+        self.max_temperature = 1000
         self.sprite = pygame.image.load(sprites['player']).convert()
         entities.append(self)
 
@@ -35,7 +35,7 @@ class Player:
         if (self.velocity < self.max_velocity and
                 self.temperature < self.max_temperature):
             self.velocity += self.acceleration
-            self.temperature += self.velocity
+            self.temperature += self.acceleration*50
         self.adjust_trajectory()
 
     def decelerate(self):
