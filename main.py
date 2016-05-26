@@ -6,6 +6,7 @@ sprites = {'player': './res/spaceship1_small-White.png'}
 size = width, height = 800, 600
 fps = 60
 fill_colour = 0, 0, 0
+font_colour = 255, 255, 255
 
 pygame.init()
 font = pygame.font.SysFont('monospace', 15)
@@ -14,6 +15,7 @@ screen = pygame.display.set_mode(size)
 entities = []
 
 hud_mode = 0
+
 
 class Player:
 
@@ -179,11 +181,13 @@ def render_hud(screen):
 def render_status_panel(screen):
     player = entities[0]
     text = font.render('TEMP', 1, (255, 255, 255))
-    temp_meter = pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(50, 580, 100, 15), 1)
+    frame = pygame.Rect(50, 580, 100, 15)
+    temp_meter = pygame.draw.rect(screen, font_colour, frame, 1)
     reading = 97
     if player.temperature < player.max_temperature:
         reading = (player.temperature / 10) - 1
-    meter_value = pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(52, 581, reading, 13))
+    fill = pygame.Rect(52, 581, reading, 13)
+    meter_value = pygame.draw.rect(screen, (255, 0, 0), fill)
     screen.blit(text, (5, 580))
 
 
