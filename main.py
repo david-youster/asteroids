@@ -25,6 +25,7 @@ class Player:
         self.max_velocity = 3
         self.min_velocity = -1
         self.acceleration = 0.1
+        self.inertia = 4
         self.sprite = pygame.image.load(sprites['player']).convert()
         entities.append(self)
 
@@ -46,7 +47,7 @@ class Player:
 
     def adjust_velocity(self, px, py):
         if (px, py) != (self.dx, self.dy):
-            self.velocity /= 4
+            self.velocity /= self.inertia
 
     def rotate(self, clockwise=True):
         self.rotation += self.rotation_speed if clockwise else -rotation_speed
