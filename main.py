@@ -2,7 +2,9 @@ import pygame
 import math
 import sys
 
-sprites = {'player': './res/ships/white_small.png'}
+sprites = {
+    'player': './res/ships/white_small.png',
+    'asteroid': './res/asteroids/small/a10000.png'}
 size = width, height = 800, 600
 fps = 60
 fill_colour = 0, 0, 0
@@ -129,9 +131,28 @@ class Bullet:
         pygame.draw.circle(screen, (255, 0, 0), (int(self.x), int(self.y)), 3)
 
 
+class Asteroid:
+
+    def __init__(self):
+        self.x, self.y = self.init_position()
+        self.dx, self.dy = 0, 0
+        self.sprite = pygame.image.load(sprites['asteroid']).convert_alpha()
+        entities.append(self)
+
+    def init_position(self):
+        return width/4, height/4
+
+    def update(self):
+        pass
+
+    def draw(self, screen):
+        screen.blit(self.sprite, (self.x, self.y))
+
+
 def main():
     clock = pygame.time.Clock()
     player = Player()
+    asteroid = Asteroid()
     while True:
         update(player)
         draw()
