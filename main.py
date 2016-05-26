@@ -32,8 +32,10 @@ class Player:
         entities.append(self)
 
     def accelerate(self):
-        if self.velocity < self.max_velocity:
+        if (self.velocity < self.max_velocity and
+                self.temperature < self.max_temperature):
             self.velocity += self.acceleration
+            self.temperature += self.velocity
         self.adjust_trajectory()
 
     def decelerate(self):
