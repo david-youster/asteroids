@@ -178,9 +178,13 @@ def render_hud(screen):
 
 def render_status_panel(screen):
     player = entities[0]
-    text = 'Temp: {:.0f}/{}'.format(player.temperature, player.max_temperature)
-    text = font.render(text, 1, (255, 255, 255))
-    screen.blit(text, (10, 580))
+    text = font.render('TEMP', 1, (255, 255, 255))
+    temp_meter = pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(50, 580, 100, 15), 1)
+    reading = 97
+    if player.temperature < player.max_temperature:
+        reading = (player.temperature / 10) - 1
+    meter_value = pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(52, 581, reading, 13))
+    screen.blit(text, (5, 580))
 
 
 def render_debug_panel(screen):
