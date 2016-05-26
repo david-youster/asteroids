@@ -4,7 +4,7 @@ import sys
 
 res = {
     'player': './res/ships/white_small.png',
-    'asteroid': './res/asteroids/small/a10000.png'}
+    'asteroid': './res/asteroids/small/a*.png'}
 size = width, height = 800, 600
 fps = 60
 fill_colour = 0, 0, 0
@@ -14,9 +14,7 @@ pygame.init()
 font = pygame.font.SysFont('monospace', 15)
 screen = pygame.display.set_mode(size)
 
-sprites = {
-    'player': pygame.image.load(res['player']).convert_alpha(),
-    'asteroid': pygame.image.load(res['asteroid']).convert_alpha()}
+sprites = {'groups': {}}
 entities = []
 hud_mode = 0
 
@@ -138,14 +136,20 @@ class Asteroid:
     def __init__(self):
         self.x, self.y = self.init_position()
         self.dx, self.dy = 0, 0
-        self.sprite = sprites['asteroid']
+        self.sprite_group = sprites['groups']['asteroid']
+        self.sprite_index = -1
+        self.animate()
         entities.append(self)
 
     def init_position(self):
         return width/4, height/4
 
     def update(self):
-        pass
+        self.animate()
+
+    def animate(self):
+        self.sprite_index = (self.sprite_index + 1) % len(self.sprite_group)
+        self.sprite = self.sprite_group[self.sprite_index]
 
     def draw(self, screen):
         screen.blit(self.sprite, (self.x, self.y))
@@ -153,12 +157,30 @@ class Asteroid:
 
 def main():
     clock = pygame.time.Clock()
+    load_sprites()
     player = Player()
     asteroid = Asteroid()
     while True:
         update(player)
         draw()
         clock.tick(fps)
+
+
+def load_sprites():
+    sprites['player'] = load_sprite(res['player'])
+    sprites['groups']['asteroid'] = load_sprite_group(
+        res['asteroid'], 10000, 10015)
+
+
+def load_sprite(path):
+    return pygame.image.load(path).convert_alpha()
+
+
+def load_sprite_group(path, start, end):
+    group = []
+    for i in range(start, end+1):
+        group.append(load_sprite(path.replace('*', str(i))))
+    return group
 
 
 def update(player):
