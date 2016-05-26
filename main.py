@@ -86,11 +86,43 @@ class Player:
         self.temperature -= 0.1 if self.temperature >= 1 else 0
 
     def shoot(self):
-        pass
+        Bullet(self.x+17, self.y+10, self.rotation)
 
     def draw(self, screen):
         rotated_image = pygame.transform.rotate(self.sprite, self.rotation)
         screen.blit(rotated_image, (self.x, self.y))
+
+
+class Bullet:
+
+    def __init__(self, x, y, angle):
+        self.x, self.y = x, y
+        self.dx, self.dy = self.calculate_trajectory(angle)
+        self.velocity = 5
+        entities.append(self)
+
+    def calculate_trajectory(self, angle):
+        dx = -math.sin(math.radians(angle))
+        dy = -math.cos(math.radians(angle))
+        return dx, dy
+
+    def move(self):
+        if self.inside_x_boundary() and self.inside_y_boundary():
+            self.x += self.dx * self.velocity
+            self.y += self.dy * self.velocity
+        else:
+            entities.remove(self)
+
+    def inside_x_boundary(self):
+        nx = self.x + self.dx*self.velocity
+        return nx > 0 and nx < width
+
+    def inside_y_boundary(self):
+        ny = self.y + self.dy*self.velocity
+        return ny > 0 and ny < height
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, (255, 0, 0), (int(self.x), int(self.y)), 3)
 
 
 def main():
@@ -123,6 +155,8 @@ def update(player):
         player.shoot()
     player.move()
     player.cool_engine()
+    for entity in entities:
+        entity.move()
 
 
 def toggle_hud_mode():
