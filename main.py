@@ -84,7 +84,8 @@ class Entity:
                 self.non_collidables.remove(e)
 
     def kill(self):
-        entities.remove(self)
+        if self in entities:
+            entities.remove(self)
 
 
 class Player(Entity):
