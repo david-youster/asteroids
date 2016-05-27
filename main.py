@@ -179,9 +179,6 @@ class Asteroid:
         self.animate()
         entities.append(self)
 
-    def init_position(self):
-        return random.randint(0-width, 0), random.randint(height, height+10)
-
     def update(self):
         self.check_collisions()
         if self.inside_x_boundary() and self.inside_y_boundary():
