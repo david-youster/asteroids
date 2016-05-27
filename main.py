@@ -134,7 +134,7 @@ class Player(Entity):
         self.temperature -= amount if self.temperature >= 1 else 0
 
     def shoot(self):
-        Bullet(self.x+17, self.y+10, self.rotation)
+        Bullet(self.x+17, self.y, self.rotation)
         self.temperature += 5
 
     def draw(self):
