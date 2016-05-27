@@ -34,9 +34,48 @@ class Rect:
             self.y1 < other.y2 and self.y2 > other.y1)
 
 
-class Player:
+class Entity:
 
     def __init__(self):
+        self.x, self.y = 0, 0
+        self.dx, self.dy = 0, 0
+        self.velocity = 0
+        self.last_collided = None
+
+    def check_collisions(self):
+        for other in entities:
+            if self.collided_with(other) and other is not self.last_collided:
+                self.last_collided = other
+                self.handle_collision()
+                try:
+                    other.handle_collision()
+                except AttributeError:
+                    pass
+
+    def collided_with(self, other):
+        r1 = Rect(self.x, self.y, self.x+20, self.y+20)
+        r2 = Rect(other.x, other.y, other.x+20, other.y+20)
+        return self is not other and r1.overlaps(r2)
+
+    def handle_collision(self):
+        self.reverse_direction()
+
+    def inside_x_boundary(self):
+        nx = self.x + self.dx*self.velocity
+        return nx > 0 and nx < width
+
+    def inside_y_boundary(self):
+        ny = self.y + self.dy*self.velocity
+        return ny > 0 and ny < height
+
+    def reverse_direction(self):
+        self.velocity = -(self.velocity * 0.9)
+
+
+class Player(Entity):
+
+    def __init__(self):
+        Entity.__init__(self)
         self.x, self.y = width/2, height/2
         self.dx, self.dy = random_delta()
         self.rotation = 0
@@ -93,36 +132,6 @@ class Player:
             self.reverse_direction()
         self.cool_engine()
 
-
-    def check_collisions(self):
-        for other in entities:
-            if self.collided_with(other) and other is not self.last_collided:
-                self.last_collided = other
-                self.handle_collision()
-                try:
-                    other.handle_collision()
-                except AttributeError:
-                    pass
-
-    def collided_with(self, other):
-        r1 = Rect(self.x, self.y, self.x+20, self.y+20)
-        r2 = Rect(other.x, other.y, other.x+20, other.y+20)
-        return self is not other and r1.overlaps(r2)
-
-    def handle_collision(self):
-        self.reverse_direction()
-
-    def inside_x_boundary(self):
-        nx = self.x + self.dx*self.velocity
-        return nx > 0 and nx < width
-
-    def inside_y_boundary(self):
-        ny = self.y + self.dy*self.velocity
-        return ny > 0 and ny < height
-
-    def reverse_direction(self):
-        self.velocity = -(self.velocity * 0.9)
-
     def cool_engine(self, amount=0.5):
         self.temperature -= amount if self.temperature >= 1 else 0
 
@@ -167,13 +176,13 @@ class Bullet:
         pygame.draw.circle(screen, (255, 0, 0), (int(self.x), int(self.y)), 3)
 
 
-class Asteroid:
+class Asteroid(Entity):
 
     def __init__(self):
+        Entity.__init__(self)
         self.x, self.y = random_outer_coord()
         self.dx, self.dy = random_delta()
         self.velocity = 2
-        self.last_collided = None
         self.sprite_group = sprites['groups']['asteroid']
         self.sprite_index = -1
         self.animate()
@@ -187,35 +196,6 @@ class Asteroid:
             self.y += self.dy * self.velocity
         else:
             entities.remove(self)
-
-    def check_collisions(self):
-        for other in entities:
-            if self.collided_with(other) and other is not self.last_collided:
-                self.last_collided = other
-                self.handle_collision()
-                try:
-                    other.handle_collision()
-                except AttributeError:
-                    pass
-
-    def collided_with(self, other):
-        r1 = Rect(self.x, self.y, self.x+20, self.y+20)
-        r2 = Rect(other.x, other.y, other.x+20, other.y+20)
-        return self is not other and r1.overlaps(r2)
-
-    def handle_collision(self):
-        self.reverse_direction()
-
-    def reverse_direction(self):
-        self.velocity = -(self.velocity * 0.9)
-
-    def inside_x_boundary(self):
-        nx = self.x + self.dx*self.velocity
-        return nx > 0 and nx < width
-
-    def inside_y_boundary(self):
-        ny = self.y + self.dy*self.velocity
-        return ny > 0 and ny < height
 
     def animate(self):
         self.sprite_index = (self.sprite_index + 1) % len(self.sprite_group)
