@@ -102,8 +102,8 @@ class Player(Entity):
         self.inertia = 4
         self.temperature = 0
         self.max_temperature = 1000
-        self.hp = 100
-        self.max_hp = 100
+        self.hp = 1000
+        self.max_hp = 1000
         self.score = 0
         self.sprite = sprites['player']
         entities.append(self)
@@ -170,6 +170,7 @@ class Asteroid(Entity):
         self.dx, self.dy = random_delta()
         self.velocity = 2
         self.hp = 1
+        self.collision_damage = 100
         self.sprite_group = sprites['groups']['asteroid']
         self.sprite_index = -1
         self.animate()
