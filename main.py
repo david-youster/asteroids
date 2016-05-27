@@ -18,6 +18,7 @@ screen = pygame.display.set_mode(size)
 
 sprites = {'groups': {}}
 entities = []
+collisions = []
 hud_mode = 0
 asteroid_timestamp = 0
 asteroid_creation_rate = 0.2
@@ -46,7 +47,7 @@ class Entity:
         for other in entities:
             if self.collided_with(other) and other is not self.last_collided:
                 self.last_collided = other
-                self.handle_collision()
+                collisions.append(self)
 
     def collided_with(self, other):
         r1 = Rect(self.x, self.y, self.x+32, self.y+32)
@@ -253,8 +254,8 @@ def create_asteroids():
 def update(player):
     handle_events()
     handle_keys(player)
-    for entity in entities:
-        entity.update()
+    handle_collisions()
+    update_entities()
 
 
 def handle_events():
@@ -279,6 +280,16 @@ def handle_keys(player):
         player.rotate(False)
     if key[pygame.K_SPACE]:
         player.shoot()
+
+
+def handle_collisions():
+    while collisions:
+        collisions.pop().handle_collision()
+
+
+def update_entities():
+    for entity in entities:
+        entity.update()
 
 
 def toggle_hud_mode():
