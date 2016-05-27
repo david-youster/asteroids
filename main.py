@@ -185,7 +185,7 @@ class Asteroid(Entity):
             self.x += self.dx * self.velocity
             self.y += self.dy * self.velocity
         else:
-            entities.remove(self)
+            self.kill()
 
     def handle_death(self):
         if self.hp <= 0:
@@ -221,7 +221,7 @@ class Bullet(Entity):
             self.x += self.dx * self.velocity
             self.y += self.dy * self.velocity
         else:
-            entities.remove(self)
+            self.kill()
 
     def collided_with(self, other):
         rect = Rect(other.x, other.y, other.x+32, other.y+32)
