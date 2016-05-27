@@ -144,7 +144,7 @@ class Player(Entity):
         screen.blit(rotated_image, (self.x, self.y))
 
 
-class Bullet:
+class Bullet(Entity):
 
     def __init__(self, x, y, angle):
         self.x, self.y = x, y
@@ -158,19 +158,15 @@ class Bullet:
         return dx, dy
 
     def update(self):
+        self.handle_collision()
         if self.inside_x_boundary() and self.inside_y_boundary():
             self.x += self.dx * self.velocity
             self.y += self.dy * self.velocity
         else:
             entities.remove(self)
 
-    def inside_x_boundary(self):
-        nx = self.x + self.dx*self.velocity
-        return nx > 0 and nx < width
-
-    def inside_y_boundary(self):
-        ny = self.y + self.dy*self.velocity
-        return ny > 0 and ny < height
+    def handle_collision(self):
+        pass
 
     def draw(self, screen):
         pygame.draw.circle(screen, (255, 0, 0), (int(self.x), int(self.y)), 3)
