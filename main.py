@@ -318,8 +318,8 @@ def handle_keys():
 
 def handle_collisions():
     while collisions:
-        collision = collisions.pop()
-        collision[0].handle_collision(collision[1])
+        collided_object, collision_cause = collisions.pop()
+        collided_object.handle_collision(collision_cause)
 
 
 def update_entities():
@@ -345,17 +345,34 @@ def render_hud():
 
 
 def render_status_panel():
-    text = font.render('TEMP', 1, (255, 255, 255))
+    render_temperature_meter()
+    render_hp_meter()
     score = font.render(str(player.score), 1, (255, 255, 255))
+    screen.blit(score, (750, 580))
+
+
+def render_temperature_meter():
+    label = font.render('TEMP', 1, (255, 255, 255))
+    screen.blit(label, (5, 580))
     frame = pygame.Rect(50, 580, 100, 15)
-    temp_meter = pygame.draw.rect(screen, font_colour, frame, 1)
+    pygame.draw.rect(screen, font_colour, frame, 1)
     reading = 97
     if player.temperature < player.max_temperature:
         reading = (player.temperature / 10) - 1
     fill = pygame.Rect(52, 581, reading, 13)
     meter_value = pygame.draw.rect(screen, (255, 0, 0), fill)
-    screen.blit(text, (5, 580))
-    screen.blit(score, (160, 580))
+
+
+def render_hp_meter():
+    label = font.render('HP', 1, (255, 255, 255))
+    screen.blit(label, (160, 580))
+    frame = pygame.Rect(190, 580, 100, 15)
+    pygame.draw.rect(screen, font_colour, frame, 1)
+    reading = 97
+    if player.hp < player.max_hp:
+        reading = (player.hp / 10) - 1
+    fill = pygame.Rect(192, 581, reading, 13)
+    meter_value = pygame.draw.rect(screen, (0, 0, 255), fill)
 
 
 def render_debug_panel():
