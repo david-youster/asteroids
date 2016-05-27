@@ -88,7 +88,6 @@ class Player(Entity):
         self.inertia = 4
         self.temperature = 0
         self.max_temperature = 1000
-        self.last_collided = None
         self.sprite = sprites['player']
         entities.append(self)
 
