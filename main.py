@@ -202,7 +202,7 @@ class Bullet(Entity):
         super().__init__()
         self.x, self.y = x, y
         self.dx, self.dy = self.calculate_trajectory(angle)
-        self.velocity = 50
+        self.velocity = 25
         self.collision_damage = 1
         entities.append(self)
 
