@@ -103,6 +103,8 @@ class Player(Entity):
         self.temperature = 0
         self.max_temperature = 1000
         self.hp = 100
+        self.max_hp = 100
+        self.score = 0
         self.sprite = sprites['player']
         entities.append(self)
 
@@ -224,6 +226,7 @@ class Bullet(Entity):
         return rect.contains(self.x, self.y) and other is not player
 
     def handle_collision(self, other):
+        player.score += 1
         self.kill()
 
     def draw(self):
@@ -343,6 +346,7 @@ def render_hud():
 
 def render_status_panel():
     text = font.render('TEMP', 1, (255, 255, 255))
+    score = font.render(str(player.score), 1, (255, 255, 255))
     frame = pygame.Rect(50, 580, 100, 15)
     temp_meter = pygame.draw.rect(screen, font_colour, frame, 1)
     reading = 97
@@ -351,6 +355,7 @@ def render_status_panel():
     fill = pygame.Rect(52, 581, reading, 13)
     meter_value = pygame.draw.rect(screen, (255, 0, 0), fill)
     screen.blit(text, (5, 580))
+    screen.blit(score, (160, 580))
 
 
 def render_debug_panel():
