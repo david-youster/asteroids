@@ -135,25 +135,56 @@ class Bullet:
 class Asteroid:
 
     def __init__(self):
-        self.x, self.y = self.init_position()
-        self.dx, self.dy = 0, 0
+        self.x, self.y = random_outer_coord()
+        self.dx, self.dy = random_delta()
+        self.velocity = 2
         self.sprite_group = sprites['groups']['asteroid']
         self.sprite_index = -1
         self.animate()
         entities.append(self)
 
     def init_position(self):
-        return width/random.randint(1, 10), height/random.randint(1, 10)
+        return random.randint(0-width, 0), random.randint(height, height+10)
 
     def update(self):
-        self.animate()
+        if self.inside_x_boundary() and self.inside_y_boundary():
+            self.animate()
+            self.x += self.dx * self.velocity
+            self.y += self.dy * self.velocity
+        else:
+            entities.remove(self)
+
+    def inside_x_boundary(self):
+        nx = self.x + self.dx*self.velocity
+        return nx > 0 and nx < width
+
+    def inside_y_boundary(self):
+        ny = self.y + self.dy*self.velocity
+        return ny > 0 and ny < height
 
     def animate(self):
         self.sprite_index = (self.sprite_index + 1) % len(self.sprite_group)
         self.sprite = self.sprite_group[self.sprite_index]
 
     def draw(self, screen):
-        screen.blit(self.sprite, (self.x, self.y))
+        if self.inside_x_boundary() and self.inside_y_boundary():
+            screen.blit(self.sprite, (self.x, self.y))
+
+
+
+def random_outer_coord():
+    north = (random.randint(0, width), 0)
+    south = (random.randint(0, width), height)
+    west = (0, random.randint(0, height))
+    east = (width, random.randint(0, height))
+    return random.choice([north, south, west, east])
+
+
+def random_delta():
+        dx, dy = random.randint(-1, 1), random.randint(-1, 1)
+        while dx == dy:
+            dx, dy = random.randint(-1, 1), random.randint(-1, 1)
+        return dx, dy
 
 
 def main():
@@ -186,8 +217,7 @@ def load_sprite_group(path, start, end):
 
 
 def create_asteroids():
-    num_asteroids = random.randint(0, 10)
-    entities.extend((Asteroid() for i in range(num_asteroids+1)))
+    entities.append(Asteroid())
 
 
 def update(player):
