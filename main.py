@@ -23,6 +23,17 @@ asteroid_timestamp = 0
 asteroid_creation_rate = 0.2
 
 
+class Rect:
+
+    def __init__(self, x1, y1, x2, y2):
+        self.x1, self.y1 = x1, y1
+        self.x2, self.y2 = x2, y2
+
+    def overlaps(self, other):
+        return (self.x1 < other.x2 and self.x2 > other.x1 and
+            self.y1 < other.y2 and self.y2 > other.y1)
+
+
 class Player:
 
     def __init__(self):
@@ -37,6 +48,7 @@ class Player:
         self.inertia = 4
         self.temperature = 0
         self.max_temperature = 1000
+        self.last_collided = None
         self.sprite = sprites['player']
         entities.append(self)
 
@@ -70,6 +82,7 @@ class Player:
         self.rotation %= 360
 
     def update(self):
+        self.check_collisions()
         if self.inside_x_boundary():
             self.x += self.dx * self.velocity
         else:
@@ -79,6 +92,27 @@ class Player:
         else:
             self.reverse_direction()
         self.cool_engine()
+
+
+    def check_collisions(self):
+        for other in entities:
+            if self.collided_with(other) and other is not self.last_collided:
+                self.last_collided = other
+                self.handle_collision(other)
+                try:
+                    other.handle_collision()
+                except AttributeError:
+                    pass
+
+    def collided_with(self, other):
+        r1 = Rect(self.x, self.y, self.x+32, self.y+32)
+        r2 = Rect(other.x, other.y, other.x+32, other.y+32)
+        return self is not other and r1.overlaps(r2)
+
+    def handle_collision(self, other):
+        print('Asteroid {}'.format(id(other)))
+        #self.dx, self.dy = -self.dx, -self.dy
+
 
     def inside_x_boundary(self):
         nx = self.x + self.dx*self.velocity
