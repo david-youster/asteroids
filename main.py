@@ -1,6 +1,7 @@
 import pygame
 import random
 import math
+import time
 import sys
 
 res = {
@@ -18,6 +19,8 @@ screen = pygame.display.set_mode(size)
 sprites = {'groups': {}}
 entities = []
 hud_mode = 0
+asteroid_timestamp = 0
+asteroid_creation_rate = 0.2
 
 
 class Player:
@@ -217,7 +220,11 @@ def load_sprite_group(path, start, end):
 
 
 def create_asteroids():
-    entities.append(Asteroid())
+    global asteroid_timestamp
+    new_timestamp = time.time()
+    if new_timestamp - asteroid_timestamp > asteroid_creation_rate:
+        entities.append(Asteroid())
+        asteroid_timestamp = new_timestamp
 
 
 def update(player):
