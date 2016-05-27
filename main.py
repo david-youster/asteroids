@@ -35,6 +35,9 @@ class Rect:
         return (self.x1 < other.x2 and self.x2 > other.x1 and
                 self.y1 < other.y2 and self.y2 > other.y1)
 
+    def contains(self, x, y):
+        return (x > self.x1 and x < self.x2 and y > self.y1 and y < self.y2)
+
 
 class Entity:
 
@@ -195,15 +198,19 @@ class Bullet(Entity):
         return dx, dy
 
     def update(self):
-        self.handle_collision()
+        self.check_collisions()
         if self.inside_x_boundary() and self.inside_y_boundary():
             self.x += self.dx * self.velocity
             self.y += self.dy * self.velocity
         else:
             entities.remove(self)
 
+    def collided_with(self, other):
+        rect = Rect(other.x, other.y, other.x+32, other.y+32)
+        return rect.contains(self.x, self.y) and other is not player
+
     def handle_collision(self):
-        pass
+        entities.remove(self)
 
     def draw(self):
         pygame.draw.circle(screen, (255, 0, 0), (int(self.x), int(self.y)), 3)
@@ -274,6 +281,8 @@ def handle_events():
             shutdown()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_h:
             toggle_hud_mode()
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            player.shoot()
 
 
 def handle_keys():
@@ -288,8 +297,6 @@ def handle_keys():
         player.rotate()
     if key[pygame.K_RIGHT]:
         player.rotate(False)
-    if key[pygame.K_SPACE]:
-        player.shoot()
 
 
 def handle_collisions():
