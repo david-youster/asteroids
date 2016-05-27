@@ -53,8 +53,8 @@ class Entity:
                     pass
 
     def collided_with(self, other):
-        r1 = Rect(self.x, self.y, self.x+20, self.y+20)
-        r2 = Rect(other.x, other.y, other.x+20, other.y+20)
+        r1 = Rect(self.x, self.y, self.x+32, self.y+32)
+        r2 = Rect(other.x, other.y, other.x+32, other.y+32)
         return self is not other and r1.overlaps(r2)
 
     def handle_collision(self):
