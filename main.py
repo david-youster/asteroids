@@ -47,10 +47,6 @@ class Entity:
             if self.collided_with(other) and other is not self.last_collided:
                 self.last_collided = other
                 self.handle_collision()
-                try:
-                    other.handle_collision()
-                except AttributeError:
-                    pass
 
     def collided_with(self, other):
         r1 = Rect(self.x, self.y, self.x+32, self.y+32)
