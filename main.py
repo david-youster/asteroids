@@ -174,7 +174,7 @@ class Asteroid(Entity):
         super().__init__()
         self.x, self.y = random_outer_coord()
         self.dx, self.dy = random_delta()
-        self.velocity = 2
+        self.velocity = random.randint(1, 3)
         self.hp = 1
         self.collision_damage = 100
         self.sprite_group = sprites['groups']['asteroid']
