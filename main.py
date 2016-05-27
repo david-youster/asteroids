@@ -80,7 +80,7 @@ class Player(Entity):
         self.dx, self.dy = random_delta()
         self.rotation = 0
         self.rotation_speed = 2
-        self.velocity = 0.1
+        self.velocity = 1
         self.max_velocity = 7
         self.min_velocity = -3
         self.acceleration = 0.1
