@@ -19,6 +19,7 @@ screen = pygame.display.set_mode(size)
 sprites = {'groups': {}}
 entities = []
 collisions = []
+player = None
 hud_mode = 0
 asteroid_timestamp = 0
 asteroid_creation_rate = 0.2
@@ -136,7 +137,7 @@ class Player(Entity):
         Bullet(self.x+17, self.y+10, self.rotation)
         self.temperature += 5
 
-    def draw(self, screen):
+    def draw(self):
         rotated_image = pygame.transform.rotate(self.sprite, self.rotation)
         screen.blit(rotated_image, (self.x, self.y))
 
@@ -144,6 +145,7 @@ class Player(Entity):
 class Bullet(Entity):
 
     def __init__(self, x, y, angle):
+        super().__init__()
         self.x, self.y = x, y
         self.dx, self.dy = self.calculate_trajectory(angle)
         self.velocity = 50
@@ -165,7 +167,7 @@ class Bullet(Entity):
     def handle_collision(self):
         pass
 
-    def draw(self, screen):
+    def draw(self):
         pygame.draw.circle(screen, (255, 0, 0), (int(self.x), int(self.y)), 3)
 
 
@@ -194,7 +196,7 @@ class Asteroid(Entity):
         self.sprite_index = (self.sprite_index + 1) % len(self.sprite_group)
         self.sprite = self.sprite_group[self.sprite_index]
 
-    def draw(self, screen):
+    def draw(self):
         if self.inside_x_boundary() and self.inside_y_boundary():
             screen.blit(self.sprite, (self.x, self.y))
 
@@ -216,12 +218,13 @@ def random_delta():
 
 
 def main():
+    global player
     clock = pygame.time.Clock()
     load_sprites()
     player = Player()
     while True:
         create_asteroids()
-        update(player)
+        update()
         draw()
         clock.tick(fps)
 
@@ -251,9 +254,9 @@ def create_asteroids():
         asteroid_timestamp = new_timestamp
 
 
-def update(player):
+def update():
     handle_events()
-    handle_keys(player)
+    handle_keys()
     handle_collisions()
     update_entities()
 
@@ -266,7 +269,7 @@ def handle_events():
             toggle_hud_mode()
 
 
-def handle_keys(player):
+def handle_keys():
     key = pygame.key.get_pressed()
     if key[pygame.K_ESCAPE]:
         shutdown()
@@ -292,25 +295,24 @@ def update_entities():
         entity.update()
 
 
+def draw():
+    screen.fill(fill_colour)
+    for entity in entities:
+        entity.draw()
+    render_hud()
+    pygame.display.flip()
+
+
 def toggle_hud_mode():
     global hud_mode
     hud_mode = (hud_mode + 1) % 2
 
 
-def draw():
-    screen.fill(fill_colour)
-    for entity in entities:
-        entity.draw(screen)
-    render_hud(screen)
-    pygame.display.flip()
+def render_hud():
+    [render_status_panel, render_debug_panel][hud_mode]()
 
 
-def render_hud(screen):
-    [render_status_panel, render_debug_panel][hud_mode](screen)
-
-
-def render_status_panel(screen):
-    player = entities[0]
+def render_status_panel():
     text = font.render('TEMP', 1, (255, 255, 255))
     frame = pygame.Rect(50, 580, 100, 15)
     temp_meter = pygame.draw.rect(screen, font_colour, frame, 1)
@@ -322,8 +324,7 @@ def render_status_panel(screen):
     screen.blit(text, (5, 580))
 
 
-def render_debug_panel(screen):
-    player = entities[0]
+def render_debug_panel():
     text = 'X, Y: {} | DX, DY: {} | ACC: {:.1f} | VEL: {:.2f} | ROT: {}'
     text = text.format(
         (round(player.x), round(player.y)),
