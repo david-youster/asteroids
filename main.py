@@ -222,7 +222,6 @@ def main():
     clock = pygame.time.Clock()
     load_sprites()
     player = Player()
-    asteroid = Asteroid()
     while True:
         create_asteroids()
         update(player)
