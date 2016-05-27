@@ -38,10 +38,10 @@ class Player:
 
     def __init__(self):
         self.x, self.y = width/2, height/2
-        self.dx, self.dy = 0, 0
+        self.dx, self.dy = random_delta()
         self.rotation = 0
         self.rotation_speed = 2
-        self.velocity = 0
+        self.velocity = 0.1
         self.max_velocity = 7
         self.min_velocity = -3
         self.acceleration = 0.1
