@@ -45,6 +45,8 @@ class Entity:
         self.x, self.y = 0, 0
         self.dx, self.dy = 0, 0
         self.velocity = 0
+        self.collision_damage = 0
+        self.hp = 0
         self.last_collided = None
         self.non_collidables = []
 
@@ -52,7 +54,7 @@ class Entity:
         for other in entities:
             if self.collided_with(other) and other is not self.last_collided:
                 self.last_collided = other
-                collisions.append(self)
+                collisions.append((self, other))
 
     def collided_with(self, other):
         if self is other or other in self.non_collidables:
@@ -61,7 +63,8 @@ class Entity:
         r2 = Rect(other.x, other.y, other.x+32, other.y+32)
         return r1.overlaps(r2)
 
-    def handle_collision(self):
+    def handle_collision(self, other):
+        self.hp -= other.collision_damage
         self.reverse_direction()
 
     def inside_x_boundary(self):
@@ -80,6 +83,9 @@ class Entity:
             if e not in entities:
                 self.non_collidables.remove(e)
 
+    def kill(self):
+        entities.remove(self)
+
 
 class Player(Entity):
 
@@ -96,6 +102,7 @@ class Player(Entity):
         self.inertia = 4
         self.temperature = 0
         self.max_temperature = 1000
+        self.hp = 100
         self.sprite = sprites['player']
         entities.append(self)
 
@@ -160,12 +167,14 @@ class Asteroid(Entity):
         self.x, self.y = random_outer_coord()
         self.dx, self.dy = random_delta()
         self.velocity = 2
+        self.hp = 1
         self.sprite_group = sprites['groups']['asteroid']
         self.sprite_index = -1
         self.animate()
         entities.append(self)
 
     def update(self):
+        self.handle_death()
         self.check_collisions()
         if self.inside_x_boundary() and self.inside_y_boundary():
             self.animate()
@@ -173,6 +182,10 @@ class Asteroid(Entity):
             self.y += self.dy * self.velocity
         else:
             entities.remove(self)
+
+    def handle_death(self):
+        if self.hp <= 0:
+            self.kill()
 
     def animate(self):
         self.sprite_index = (self.sprite_index + 1) % len(self.sprite_group)
@@ -190,6 +203,7 @@ class Bullet(Entity):
         self.x, self.y = x, y
         self.dx, self.dy = self.calculate_trajectory(angle)
         self.velocity = 50
+        self.collision_damage = 1
         entities.append(self)
 
     def calculate_trajectory(self, angle):
@@ -209,8 +223,8 @@ class Bullet(Entity):
         rect = Rect(other.x, other.y, other.x+32, other.y+32)
         return rect.contains(self.x, self.y) and other is not player
 
-    def handle_collision(self):
-        entities.remove(self)
+    def handle_collision(self, other):
+        self.kill()
 
     def draw(self):
         pygame.draw.circle(screen, (255, 0, 0), (int(self.x), int(self.y)), 3)
@@ -301,7 +315,8 @@ def handle_keys():
 
 def handle_collisions():
     while collisions:
-        collisions.pop().handle_collision()
+        collision = collisions.pop()
+        collision[0].handle_collision(collision[1])
 
 
 def update_entities():
