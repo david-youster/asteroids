@@ -75,7 +75,7 @@ class Entity:
 class Player(Entity):
 
     def __init__(self):
-        Entity.__init__(self)
+        super().__init__()
         self.x, self.y = width/2, height/2
         self.dx, self.dy = random_delta()
         self.rotation = 0
@@ -179,7 +179,7 @@ class Bullet:
 class Asteroid(Entity):
 
     def __init__(self):
-        Entity.__init__(self)
+        super().__init__()
         self.x, self.y = random_outer_coord()
         self.dx, self.dy = random_delta()
         self.velocity = 2
