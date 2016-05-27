@@ -72,6 +72,11 @@ class Entity:
     def reverse_direction(self):
         self.velocity = -(self.velocity * 0.9)
 
+    def clean_non_collidables(self):
+        for e in self.non_collidables[:]:
+            if e not in entities:
+                self.non_collidables.remove(e)
+
 
 class Player(Entity):
 
@@ -121,6 +126,7 @@ class Player(Entity):
         self.rotation %= 360
 
     def update(self):
+        self.clean_non_collidables()
         self.check_collisions()
         if self.inside_x_boundary():
             self.x += self.dx * self.velocity
