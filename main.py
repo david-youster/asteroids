@@ -150,35 +150,6 @@ class Player(Entity):
         screen.blit(rotated_image, (self.x, self.y))
 
 
-class Bullet(Entity):
-
-    def __init__(self, x, y, angle):
-        super().__init__()
-        self.x, self.y = x, y
-        self.dx, self.dy = self.calculate_trajectory(angle)
-        self.velocity = 50
-        entities.append(self)
-
-    def calculate_trajectory(self, angle):
-        dx = -math.sin(math.radians(angle))
-        dy = -math.cos(math.radians(angle))
-        return dx, dy
-
-    def update(self):
-        self.handle_collision()
-        if self.inside_x_boundary() and self.inside_y_boundary():
-            self.x += self.dx * self.velocity
-            self.y += self.dy * self.velocity
-        else:
-            entities.remove(self)
-
-    def handle_collision(self):
-        pass
-
-    def draw(self):
-        pygame.draw.circle(screen, (255, 0, 0), (int(self.x), int(self.y)), 3)
-
-
 class Asteroid(Entity):
 
     def __init__(self):
@@ -207,6 +178,35 @@ class Asteroid(Entity):
     def draw(self):
         if self.inside_x_boundary() and self.inside_y_boundary():
             screen.blit(self.sprite, (self.x, self.y))
+
+
+class Bullet(Entity):
+
+    def __init__(self, x, y, angle):
+        super().__init__()
+        self.x, self.y = x, y
+        self.dx, self.dy = self.calculate_trajectory(angle)
+        self.velocity = 50
+        entities.append(self)
+
+    def calculate_trajectory(self, angle):
+        dx = -math.sin(math.radians(angle))
+        dy = -math.cos(math.radians(angle))
+        return dx, dy
+
+    def update(self):
+        self.handle_collision()
+        if self.inside_x_boundary() and self.inside_y_boundary():
+            self.x += self.dx * self.velocity
+            self.y += self.dy * self.velocity
+        else:
+            entities.remove(self)
+
+    def handle_collision(self):
+        pass
+
+    def draw(self):
+        pygame.draw.circle(screen, (255, 0, 0), (int(self.x), int(self.y)), 3)
 
 
 def random_outer_coord():
