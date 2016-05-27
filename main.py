@@ -43,6 +43,7 @@ class Entity:
         self.dx, self.dy = 0, 0
         self.velocity = 0
         self.last_collided = None
+        self.non_collidables = []
 
     def check_collisions(self):
         for other in entities:
@@ -51,9 +52,11 @@ class Entity:
                 collisions.append(self)
 
     def collided_with(self, other):
+        if self is other or other in self.non_collidables:
+            return False
         r1 = Rect(self.x, self.y, self.x+32, self.y+32)
         r2 = Rect(other.x, other.y, other.x+32, other.y+32)
-        return self is not other and r1.overlaps(r2)
+        return r1.overlaps(r2)
 
     def handle_collision(self):
         self.reverse_direction()
@@ -134,7 +137,7 @@ class Player(Entity):
         self.temperature -= amount if self.temperature >= 1 else 0
 
     def shoot(self):
-        Bullet(self.x+17, self.y, self.rotation)
+        self.non_collidables.append(Bullet(self.x+17, self.y, self.rotation))
         self.temperature += 5
 
     def draw(self):
