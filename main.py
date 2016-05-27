@@ -98,21 +98,19 @@ class Player:
         for other in entities:
             if self.collided_with(other) and other is not self.last_collided:
                 self.last_collided = other
-                self.handle_collision(other)
+                self.handle_collision()
                 try:
                     other.handle_collision()
                 except AttributeError:
                     pass
 
     def collided_with(self, other):
-        r1 = Rect(self.x, self.y, self.x+32, self.y+32)
-        r2 = Rect(other.x, other.y, other.x+32, other.y+32)
+        r1 = Rect(self.x, self.y, self.x+20, self.y+20)
+        r2 = Rect(other.x, other.y, other.x+20, other.y+20)
         return self is not other and r1.overlaps(r2)
 
-    def handle_collision(self, other):
-        print('Asteroid {}'.format(id(other)))
-        #self.dx, self.dy = -self.dx, -self.dy
-
+    def handle_collision(self):
+        self.reverse_direction()
 
     def inside_x_boundary(self):
         nx = self.x + self.dx*self.velocity
@@ -175,6 +173,7 @@ class Asteroid:
         self.x, self.y = random_outer_coord()
         self.dx, self.dy = random_delta()
         self.velocity = 2
+        self.last_collided = None
         self.sprite_group = sprites['groups']['asteroid']
         self.sprite_index = -1
         self.animate()
@@ -184,12 +183,34 @@ class Asteroid:
         return random.randint(0-width, 0), random.randint(height, height+10)
 
     def update(self):
+        self.check_collisions()
         if self.inside_x_boundary() and self.inside_y_boundary():
             self.animate()
             self.x += self.dx * self.velocity
             self.y += self.dy * self.velocity
         else:
             entities.remove(self)
+
+    def check_collisions(self):
+        for other in entities:
+            if self.collided_with(other) and other is not self.last_collided:
+                self.last_collided = other
+                self.handle_collision()
+                try:
+                    other.handle_collision()
+                except AttributeError:
+                    pass
+
+    def collided_with(self, other):
+        r1 = Rect(self.x, self.y, self.x+20, self.y+20)
+        r2 = Rect(other.x, other.y, other.x+20, other.y+20)
+        return self is not other and r1.overlaps(r2)
+
+    def handle_collision(self):
+        self.reverse_direction()
+
+    def reverse_direction(self):
+        self.velocity = -(self.velocity * 0.9)
 
     def inside_x_boundary(self):
         nx = self.x + self.dx*self.velocity
