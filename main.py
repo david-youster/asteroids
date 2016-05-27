@@ -7,6 +7,7 @@ import sys
 res = {
     'player': './res/ships/white_small.png',
     'bullet': './res/blast.png',
+    'background': './res/stars.png',
     'asteroid': './res/asteroids/small/a*.png'}
 size = width, height = 800, 600
 fps = 60
@@ -270,6 +271,7 @@ def main():
 
 
 def load_sprites():
+    sprites['background'] = load_sprite(res['background'])
     sprites['player'] = load_sprite(res['player'])
     sprites['bullet'] = load_sprite(res['bullet'])
     sprites['groups']['asteroid'] = load_sprite_group(
@@ -338,7 +340,7 @@ def update_entities():
 
 
 def draw():
-    screen.fill(fill_colour)
+    screen.blit(sprites['background'], (0, 0))
     for entity in entities:
         entity.draw()
     render_hud()
