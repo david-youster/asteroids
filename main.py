@@ -15,6 +15,7 @@ fill_colour = 0, 0, 0
 font_colour = 255, 255, 255
 
 pygame.init()
+pygame.display.set_caption('Asteroids')
 font = pygame.font.SysFont('monospace', 15)
 screen = pygame.display.set_mode(size)
 
@@ -118,14 +119,14 @@ class Player(Entity):
         if (self.velocity < self.max_velocity and
                 self.temperature < self.max_temperature):
             self.velocity += self.acceleration
-            self.temperature += abs(self.velocity)
+            self.temperature += abs(self.velocity) * 3
         self.adjust_trajectory()
 
     def decelerate(self):
         if (self.velocity > self.min_velocity and
                 self.temperature < self.max_temperature):
             self.velocity -= self.acceleration
-            self.temperature += abs(self.velocity)
+            self.temperature += abs(self.velocity) * 3
         self.adjust_trajectory()
 
     def adjust_trajectory(self):
@@ -158,7 +159,7 @@ class Player(Entity):
             self.reverse_direction()
         self.cool_engine()
 
-    def cool_engine(self, amount=0.5):
+    def cool_engine(self, amount=1):
         self.temperature -= amount if self.temperature >= 1 else 0
 
     def shoot(self):
