@@ -6,6 +6,7 @@ import sys
 
 res = {
     'player': './res/ships/white_small.png',
+    'bullet': './res/blast.png',
     'asteroid': './res/asteroids/small/a*.png'}
 size = width, height = 800, 600
 fps = 60
@@ -160,7 +161,7 @@ class Player(Entity):
         self.temperature -= amount if self.temperature >= 1 else 0
 
     def shoot(self):
-        self.non_collidables.append(Bullet(self.x+17, self.y, self.rotation))
+        self.non_collidables.append(Bullet(self.x, self.y, self.rotation))
         self.temperature += 5
 
     def draw(self):
@@ -213,6 +214,7 @@ class Bullet(Entity):
         self.dx, self.dy = self.calculate_trajectory(angle)
         self.velocity = 25
         self.collision_damage = 1
+        self.sprite = sprites['bullet']
         entities.append(self)
 
     def calculate_trajectory(self, angle):
@@ -229,15 +231,14 @@ class Bullet(Entity):
             self.kill()
 
     def collided_with(self, other):
-        rect = Rect(other.x, other.y, other.x+32, other.y+32)
-        return rect.contains(self.x, self.y) and other is not player
+        return super().collided_with(other) and other is not player
 
     def handle_collision(self, other):
         player.score += 1
         self.kill()
 
     def draw(self):
-        pygame.draw.circle(screen, (255, 0, 0), (int(self.x), int(self.y)), 3)
+        screen.blit(self.sprite, (self.x, self.y))
 
 
 def random_outer_coord():
@@ -270,6 +271,7 @@ def main():
 
 def load_sprites():
     sprites['player'] = load_sprite(res['player'])
+    sprites['bullet'] = load_sprite(res['bullet'])
     sprites['groups']['asteroid'] = load_sprite_group(
         res['asteroid'], 10000, 10015)
 
