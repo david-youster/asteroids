@@ -87,6 +87,9 @@ class Entity:
         if self in entities:
             entities.remove(self)
 
+    def is_alive(self):
+        return self in entities
+
 
 class Player(Entity):
 
@@ -141,6 +144,8 @@ class Player(Entity):
     def update(self):
         self.clean_non_collidables()
         self.check_collisions()
+        if self.hp <= 0:
+            self.kill()
         if self.inside_x_boundary():
             self.x += self.dx * self.velocity
         else:
@@ -255,11 +260,12 @@ def main():
     clock = pygame.time.Clock()
     load_sprites()
     player = Player()
-    while True:
+    while player.is_alive():
         create_asteroids()
         update()
         draw()
         clock.tick(fps)
+    print('Final score:', player.score)
 
 
 def load_sprites():
