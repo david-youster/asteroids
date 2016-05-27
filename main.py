@@ -33,7 +33,7 @@ class Rect:
 
     def overlaps(self, other):
         return (self.x1 < other.x2 and self.x2 > other.x1 and
-            self.y1 < other.y2 and self.y2 > other.y1)
+                self.y1 < other.y2 and self.y2 > other.y1)
 
 
 class Entity:
@@ -201,7 +201,6 @@ class Asteroid(Entity):
     def draw(self):
         if self.inside_x_boundary() and self.inside_y_boundary():
             screen.blit(self.sprite, (self.x, self.y))
-
 
 
 def random_outer_coord():
