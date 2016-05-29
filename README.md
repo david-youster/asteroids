@@ -13,7 +13,7 @@ Requires [Python3](https://www.python.org/download/releases/3.0/) and
 
 # Credits
 
-## Artwork sourced from (OpenGameArt.org)[https://opengameart.org/]
+## Artwork sourced from [OpenGameArt.org](https://opengameart.org/)
 
 Asteroid art by [phaelax](https://opengameart.org/users/phaelax)
 
