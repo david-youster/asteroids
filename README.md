@@ -9,7 +9,7 @@ Use UP/DOWN to thrust/decelerate, LEFT/RIGHT to rotate. SPACE to shoot.
 ## Requirements
 
 Requires [Python3](https://www.python.org/download/releases/3.0/) and
-(Pygame)[https://www.pygame.org] to run.
+[Pygame](https://www.pygame.org) to run.
 
 # Credits
 
