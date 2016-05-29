@@ -11,6 +11,8 @@ Use UP/DOWN to thrust/decelerate, LEFT/RIGHT to rotate. SPACE to shoot.
 Requires [Python3](https://www.python.org/download/releases/3.0/) and
 [Pygame](https://www.pygame.org) to run.
 
+Run `python3 main.py` to start.
+
 # Credits
 
 ## Artwork sourced from [OpenGameArt.org](https://opengameart.org/)
