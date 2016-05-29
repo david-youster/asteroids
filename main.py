@@ -162,8 +162,9 @@ class Player(Entity):
         self.temperature -= amount if self.temperature >= 1 else 0
 
     def shoot(self):
-        self.non_collidables.append(Bullet(self.x, self.y, self.rotation))
-        self.temperature += 5
+        if self.temperature < self.max_temperature:
+            self.non_collidables.append(Bullet(self.x, self.y, self.rotation))
+            self.temperature += 10 if self.temperature < self.max_temperature/2 else 20
 
     def draw(self):
         rotated_image = pygame.transform.rotate(self.sprite, self.rotation)
