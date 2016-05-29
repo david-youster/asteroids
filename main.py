@@ -6,7 +6,7 @@ import sys
 
 res = {
     'player': './res/ships/white_small.png',
-    'bullet': './res/blast.png',
+    'bullet': './res/bolt.png',
     'background': './res/stars.png',
     'asteroid': './res/asteroids/small/a*.png'}
 size = width, height = 800, 600
@@ -24,6 +24,7 @@ entities = []
 collisions = []
 player = None
 hud_mode = 0
+rapid_fire = False
 asteroid_timestamp = 0
 asteroid_creation_rate = 0.2
 
@@ -47,6 +48,7 @@ class Entity:
         self.velocity = 0
         self.collision_damage = 0
         self.hp = 0
+        self.hit = False
         self.last_collided = None
         self.non_collidables = []
 
@@ -230,10 +232,12 @@ class Bullet(Entity):
             self.kill()
 
     def collided_with(self, other):
-        return super().collided_with(other) and other is not player
+        return (super().collided_with(other) and other is not player and
+                other not in player.non_collidables and not other.hit)
 
     def handle_collision(self, other):
         player.score += 1
+        other.hit = True
         self.kill()
 
     def draw(self):
@@ -303,12 +307,15 @@ def update():
 
 
 def handle_events():
+    global rapid_fire
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             shutdown()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_h:
             toggle_hud_mode()
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+            rapid_fire = not rapid_fire
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not rapid_fire:
             player.shoot()
 
 
@@ -324,6 +331,8 @@ def handle_keys():
         player.rotate()
     if key[pygame.K_RIGHT]:
         player.rotate(False)
+    if key[pygame.K_SPACE] and rapid_fire:
+        player.shoot()
 
 
 def handle_collisions():
