@@ -359,34 +359,25 @@ def render_hud():
 
 
 def render_status_panel():
-    render_temperature_meter()
-    render_hp_meter()
+    render_meter(
+        'TEMP', player.temperature, player.max_temperature,
+        (255, 0, 0), 5, 580, 45)
+    render_meter(
+        'HP', player.hp, player.max_temperature, (0, 0, 255), 160, 580, 30)
     score = font.render(str(player.score), 1, (255, 255, 255))
     screen.blit(score, (750, 580))
 
 
-def render_temperature_meter():
-    label = font.render('TEMP', 1, (255, 255, 255))
-    screen.blit(label, (5, 580))
-    frame = pygame.Rect(50, 580, 100, 15)
+def render_meter(label, value, max_value, color, x_pos, y_pos, label_width):
+    text = font.render(label, 1, font_colour)
+    screen.blit(text, (x_pos, y_pos))
+    frame = pygame.Rect(x_pos+label_width, y_pos, 100, 15)
     pygame.draw.rect(screen, font_colour, frame, 1)
     reading = 97
-    if player.temperature < player.max_temperature:
-        reading = (player.temperature / 10) - 1
-    fill = pygame.Rect(52, 581, reading, 13)
-    meter_value = pygame.draw.rect(screen, (255, 0, 0), fill)
-
-
-def render_hp_meter():
-    label = font.render('HP', 1, (255, 255, 255))
-    screen.blit(label, (160, 580))
-    frame = pygame.Rect(190, 580, 100, 15)
-    pygame.draw.rect(screen, font_colour, frame, 1)
-    reading = 97
-    if player.hp < player.max_hp:
-        reading = (player.hp / 10) - 1
-    fill = pygame.Rect(192, 581, reading, 13)
-    meter_value = pygame.draw.rect(screen, (0, 0, 255), fill)
+    if value < max_value:
+        reading = value/10 - 1
+    fill = pygame.Rect(x_pos+label_width+2, y_pos+1, reading, 13)
+    pygame.draw.rect(screen, color, fill)
 
 
 def render_debug_panel():
