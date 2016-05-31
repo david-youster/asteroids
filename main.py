@@ -4,20 +4,30 @@ import math
 import time
 import sys
 
+FPS = 60
+SIZE = WIDTH, HEIGHT = 800, 600
+
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+FONT_COLOUR = WHITE
+FONT_SIZE = 15
+
+
 res = {
     'player': './res/ships/white_small.png',
     'bullet': './res/bolt.png',
     'background': './res/stars.png',
     'asteroid': './res/asteroids/small/a*.png'}
-size = width, height = 800, 600
-fps = 60
-fill_colour = 0, 0, 0
-font_colour = 255, 255, 255
+
 
 pygame.init()
 pygame.display.set_caption('Asteroids')
-font = pygame.font.SysFont('monospace', 15)
-screen = pygame.display.set_mode(size)
+font = pygame.font.SysFont('monospace', FONT_SIZE)
+screen = pygame.display.set_mode(SIZE)
 
 sprites = {'groups': {}}
 entities = []
@@ -70,11 +80,11 @@ class Entity:
 
     def inside_x_boundary(self):
         nx = self.x + self.dx*self.velocity
-        return nx > 0 and nx < width
+        return nx > 0 and nx < WIDTH
 
     def inside_y_boundary(self):
         ny = self.y + self.dy*self.velocity
-        return ny > 0 and ny < height
+        return ny > 0 and ny < HEIGHT
 
     def reverse_direction(self):
         self.velocity = -(self.velocity * 0.9)
@@ -96,7 +106,7 @@ class Player(Entity):
 
     def __init__(self):
         super().__init__()
-        self.x, self.y = width/2, height/2
+        self.x, self.y = WIDTH/2, HEIGHT/2
         self.dx, self.dy = random_delta()
         self.rotation = 0
         self.rotation_speed = 2
@@ -244,10 +254,10 @@ class Bullet(Entity):
 
 
 def random_outer_coord():
-    north = (random.randint(0, width), 0)
-    south = (random.randint(0, width), height)
-    west = (0, random.randint(0, height))
-    east = (width, random.randint(0, height))
+    north = (random.randint(0, WIDTH), 0)
+    south = (random.randint(0, WIDTH), HEIGHT)
+    west = (0, random.randint(0, HEIGHT))
+    east = (WIDTH, random.randint(0, HEIGHT))
     return random.choice([north, south, west, east])
 
 
@@ -267,7 +277,7 @@ def main():
         create_asteroids()
         update()
         draw()
-        clock.tick(fps)
+        clock.tick(FPS)
     print('Final score:', player.score)
 
 
@@ -368,16 +378,16 @@ def render_status_panel():
     screen.blit(score, (750, 580))
 
 
-def render_meter(label, value, max_value, color, x_pos, y_pos, label_width):
-    text = font.render(label, 1, font_colour)
+def render_meter(label, value, max_value, colour, x_pos, y_pos, label_width):
+    text = font.render(label, 1, FONT_COLOUR)
     screen.blit(text, (x_pos, y_pos))
     frame = pygame.Rect(x_pos+label_width, y_pos, 100, 15)
-    pygame.draw.rect(screen, font_colour, frame, 1)
+    pygame.draw.rect(screen, FONT_COLOUR, frame, 1)
     reading = 97
     if value < max_value:
         reading = value/10 - 1
     fill = pygame.Rect(x_pos+label_width+2, y_pos+1, reading, 13)
-    pygame.draw.rect(screen, color, fill)
+    pygame.draw.rect(screen, colour, fill)
 
 
 def render_debug_panel():
