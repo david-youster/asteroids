@@ -24,7 +24,6 @@ entities = []
 collisions = []
 player = None
 hud_mode = 0
-rapid_fire = False
 asteroid_timestamp = 0
 asteroid_creation_rate = 0.2
 
@@ -233,8 +232,7 @@ class Bullet(Entity):
             self.kill()
 
     def collided_with(self, other):
-        return (super().collided_with(other) and other is not player and
-                other not in player.non_collidables and not other.hit)
+        return (super().collided_with(other) and other is not player)
 
     def handle_collision(self, other):
         player.score += 1
@@ -314,9 +312,7 @@ def handle_events():
             shutdown()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_h:
             toggle_hud_mode()
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
-            rapid_fire = not rapid_fire
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and not rapid_fire:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             player.shoot()
 
 
@@ -332,8 +328,6 @@ def handle_keys():
         player.rotate()
     if key[pygame.K_RIGHT]:
         player.rotate(False)
-    if key[pygame.K_SPACE] and rapid_fire:
-        player.shoot()
 
 
 def handle_collisions():
