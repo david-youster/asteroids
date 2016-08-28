@@ -316,7 +316,6 @@ def update():
 
 
 def handle_events():
-    global rapid_fire
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             shutdown()
