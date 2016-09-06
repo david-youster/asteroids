@@ -16,6 +16,7 @@ BLACK = (0, 0, 0)
 FONT_COLOUR = WHITE
 FONT_SIZE = 15
 
+SPRITE_SIZE = 32
 
 res = {
     'player': './res/ships/white_small.png',
@@ -70,8 +71,8 @@ class Entity:
     def collided_with(self, other):
         if self is other or other in self.non_collidables:
             return False
-        r1 = Rect(self.x, self.y, self.x+32, self.y+32)
-        r2 = Rect(other.x, other.y, other.x+32, other.y+32)
+        r1 = Rect(self.x, self.y, self.x+SPRITE_SIZE, self.y+SPRITE_SIZE)
+        r2 = Rect(other.x, other.y, other.x+SPRITE_SIZE, other.y+SPRITE_SIZE)
         return r1.overlaps(r2)
 
     def handle_collision(self, other):
