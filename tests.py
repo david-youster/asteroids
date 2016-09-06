@@ -1,4 +1,6 @@
-from main import Rect, Entity, entities, collisions
+from main import SPRITE_SIZE
+from main import Rect, Entity
+from main import entities, collisions
 import unittest
 
 
@@ -44,6 +46,41 @@ class EntityTestCase(unittest.TestCase):
     def test_checkCollisions_entityDoesNotCollideWithSelf(self):
         entityToTest = Entity()
         entities.append(entityToTest)
+        entityToTest.check_collisions()
+        self.assertFalse(collisions)
+
+    def test_checkCollisions_emptyCollisionsListWhenNoOtherEntities(self):
+        entityToTest = Entity()
+        entityToTest.check_collisions()
+        self.assertFalse(collisions)
+
+    def test_checkCollisions_oneCollisionDetectedWhenMultipleEntitiesPresent(self):
+        entityToTest, collidedEntity = Entity(), Entity()
+        distantEntity1, distantEntity2 = Entity(), Entity()
+        distantEntity1.x, distantEntity1.y = 500, 500
+        distantEntity2.x, distantEntity2.y = 800, 800
+        entities.extend([collidedEntity, distantEntity1, distantEntity2])
+        entityToTest.check_collisions()
+        self.assertListEqual(collisions, [(entityToTest, collidedEntity)])
+
+    def test_checkCollisions_emptyCollisionsListWhenOtherEntityXPosGreaterThanSpriteSize(self):
+        entityToTest, otherEntity = Entity(), Entity()
+        otherEntity.x += SPRITE_SIZE+1
+        entities.append(otherEntity)
+        entityToTest.check_collisions()
+        self.assertFalse(collisions)
+
+    def test_checkCollisions_oneCollisionDetectedWhenOtherEntityXPosLessThanSpriteSize(self):
+        entityToTest, otherEntity = Entity(), Entity()
+        otherEntity.x += SPRITE_SIZE-1
+        entities.append(otherEntity)
+        entityToTest.check_collisions()
+        self.assertListEqual(collisions, [(entityToTest, otherEntity)])
+
+    def test_checkCollisions_emptyCollisionsListWhenOtherEntityXPosEqualsSpriteSize(self):
+        entityToTest, otherEntity = Entity(), Entity()
+        otherEntity.x += SPRITE_SIZE
+        entities.append(otherEntity)
         entityToTest.check_collisions()
         self.assertFalse(collisions)
 
