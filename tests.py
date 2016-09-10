@@ -1,8 +1,11 @@
-from main import SPRITE_SIZE
-from main import Rect, Entity
-from main import entities, collisions
+from main import SPRITE_SIZE, WIDTH, HEIGHT
+from main import Rect, Entity, Player
+from main import entities, collisions, load_sprites
 import unittest
 
+
+def init():
+    load_sprites()
 
 class RectTestCase(unittest.TestCase):
 
@@ -84,14 +87,93 @@ class EntityTestCase(unittest.TestCase):
         entityToTest.check_collisions()
         self.assertFalse(collisions)
 
+    def test_insideXBoundary_falseWhenEntityXPosIsNegative(self):
+        entityToTest = Entity()
+        entityToTest.x = -1
+        self.assertFalse(entityToTest.inside_x_boundary())
+
+    def test_insideXBoundary_falseWhenEntityXPosGreaterThanScreenWidth(self):
+        entityToTest = Entity()
+        entityToTest.x = WIDTH + 1
+        self.assertFalse(entityToTest.inside_x_boundary())
+
+    def test_insideYBoundary_falseWhenEntityYPosIsNegative(self):
+        entityToTest = Entity()
+        entityToTest.y = -1
+        self.assertFalse(entityToTest.inside_y_boundary())
+
+    def test_insideXBoundary_falseWhenEntityYPosGreaterThanScreenHeight(self):
+        entityToTest = Entity()
+        entityToTest.y = HEIGHT + 1
+        self.assertFalse(entityToTest.inside_y_boundary())
+
+
 
 class PlayerTestCase(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.player = Player()
 
     def tearDown(self):
         pass
+
+    def test_accelerate_successfulWithLowTemperatureAndVelocity(self):
+        oldVelocity = self.player.velocity
+        self.player.accelerate()
+        self.assertFalse(self.player.velocity == oldVelocity)
+
+    def test_accelerate_failsWhenMaxVelocityExceeded(self):
+        self.player.velocity += self.player.max_velocity
+        oldVelocity = self.player.velocity
+        self.player.accelerate()
+        self.assertTrue(self.player.velocity == oldVelocity)
+
+    def test_accelerate_failsWhenMaxTemperatureExceeded(self):
+        self.player.temperature += self.player.max_temperature
+        oldTemperature = self.player.temperature
+        self.player.accelerate()
+        self.assertTrue(self.player.temperature == oldTemperature)
+
+    def test_accelerate_temperatureUnchangedOnFailDueToExcessiveVelocity(self):
+        self.player.velocity = self.player.max_velocity+1
+        oldTemperature = self.player.temperature
+        self.player.accelerate()
+        self.assertTrue(self.player.temperature == oldTemperature)
+
+    def test_accelerate_temperatureUnchangedOnFailDueToExcessiveTemperature(self):
+        self.player.temperature = self.player.max_temperature+1
+        oldTemperature = self.player.temperature
+        self.player.accelerate()
+        self.assertTrue(self.player.temperature == oldTemperature)
+
+    def test_decelerate_successfulWithLowTemperatureAndVelocity(self):
+        oldVelocity = self.player.velocity
+        self.player.decelerate()
+        self.assertFalse(self.player.velocity == oldVelocity)
+
+    def test_decelerate_failsWhenMinVelocityExceeded(self):
+        self.player.velocity = self.player.min_velocity-1
+        oldVelocity = self.player.velocity
+        self.player.decelerate()
+        self.assertTrue(self.player.velocity == oldVelocity)
+
+    def test_decelerate_failsWhenMaxTemperatureExceeded(self):
+        self.player.temperature += self.player.max_temperature
+        oldTemperature = self.player.temperature
+        self.player.decelerate()
+        self.assertTrue(self.player.temperature == oldTemperature)
+
+    def test_decelerate_temperatureUnchangedOnFailDueToLowVelocity(self):
+        self.player.velocity = self.player.min_velocity-1
+        oldTemperature = self.player.temperature
+        self.player.decelerate()
+        self.assertTrue(self.player.temperature == oldTemperature)
+
+    def test_decelerate_temperatureUnchangedOnFailDueToExcessiveTemperature(self):
+        self.player.temperature = self.player.max_temperature+1
+        oldTemperature = self.player.temperature
+        self.player.decelerate()
+        self.assertTrue(self.player.temperature == oldTemperature)
 
 
 class AsteroidTestCase(unittest.TestCase):
@@ -114,4 +196,5 @@ class BulletTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    init()
     unittest.main()
