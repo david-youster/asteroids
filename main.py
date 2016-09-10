@@ -129,14 +129,14 @@ class Player(Entity):
                 self.temperature < self.max_temperature):
             self.velocity += self.acceleration
             self.temperature += abs(self.velocity) * 5
-        self.adjust_trajectory()
+            self.adjust_trajectory()
 
     def decelerate(self):
         if (self.velocity > self.min_velocity and
                 self.temperature < self.max_temperature):
             self.velocity -= self.acceleration
             self.temperature += abs(self.velocity) * 5
-        self.adjust_trajectory()
+            self.adjust_trajectory()
 
     def adjust_trajectory(self):
         px, py = self.dx, self.dy
