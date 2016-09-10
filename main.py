@@ -142,9 +142,9 @@ class Player(Entity):
         px, py = self.dx, self.dy
         self.dx = -math.sin(math.radians(self.rotation))
         self.dy = -math.cos(math.radians(self.rotation))
-        self.adjust_velocity(px, py)
+        self.apply_inertia(px, py)
 
-    def adjust_velocity(self, px, py):
+    def apply_inertia(self, px, py):
         if (px, py) != (self.dx, self.dy):
             self.velocity /= self.inertia
 
