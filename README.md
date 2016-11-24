@@ -1,6 +1,6 @@
 # Asteroids
 
-A Python-based Asteroids knock-off. Work in progress.
+A Python-based Asteroids knock-off.
 
 Use UP/DOWN to thrust/decelerate, LEFT/RIGHT to rotate. SPACE to shoot.
 
